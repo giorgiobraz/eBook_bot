@@ -37,7 +37,7 @@ def get_price(url):
     if (book_price):
         return get_formatted_price(str(book_price))
 
-    elif (kindle_unlimited_price):
+    if (kindle_unlimited_price):
         return get_formatted_price(str(kindle_unlimited_price))
 
     return False
