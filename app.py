@@ -52,12 +52,11 @@ def send_push_notification(url, preco_original, preco_ideal, push_option):
         print("Corre lá pra comprar!")
         return
 
-    elif (preco_atual < preco_original) and (push_option == True):
+    if (preco_atual < preco_original) and (push_option == True):
         print("O preço caiu")
         return
 
-    else:
-        return False
+    return False
 
 
 def main():
