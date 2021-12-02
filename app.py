@@ -40,8 +40,7 @@ def get_price(url):
     elif (kindle_unlimited_price):
         return get_formatted_price(str(kindle_unlimited_price))
 
-    else:
-        return False
+    return False
 
 
 def send_push_notification(url, preco_original, preco_ideal, push_option):
