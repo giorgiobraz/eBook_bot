@@ -67,11 +67,9 @@ def main():
 
     if (type(preco_original) == float) or (type(get_price) == bool):
         print("O preço atual do produto é:", preco_original)
-        while True:
+        while !((preco_ideal != invalid_value) and (preco_ideal < preco_original)):
             preco_ideal = float(
                 input("Qual preço você quer pagar por esse produto?"))
-            if (preco_ideal != invalid_value) and (preco_ideal < preco_original):
-                break
     else:
         print("Não consegui encontrar o produto.")
         return
