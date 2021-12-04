@@ -1,6 +1,15 @@
+import os
 from urllib.request import urlopen
+# from urllib.error import URLError, HTTPError
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
 # import sys
+load_dotenv()
+
+
+# TODO Send Push Notification
+
+KINDLE = os.getenv('KINDLE')
 
 
 def url_to_html(url):
@@ -8,30 +17,64 @@ def url_to_html(url):
     return response.read()
 
 
-def find_price_in_html(html):
-    content_html_page = BeautifulSoup(html, 'html.parser')
-    # price # id tag for physical books
-    # kindle-price # id tag for eBooks
-    # price_inside_buybox # id tag for physical products
-
-    return content_html_page.find(id="price").get_text()
-
-
-def get_formatted_price(price):
-    price_index = price.find('$') + 2
-    price = price[price_index:len(price)+1]
+def parse_price(price):
+    price_start = price.find('$') + 1
+    price_end = price.find(',') + 3
+    price = price[price_start:price_end]
     price = price.replace('.', '')
     price = price.replace(',', '.')
     return float(price)
 
 
-# url = 'https://www.amazon.com.br/1984-Exclusiva-Amazon-George-Orwell/dp/6586490162/ref=tmm_hrd_swatch_0?_encoding=UTF8&qid=1631567074&sr=1-3'
+def get_price(url):
+    html = url_to_html(url)
+    content_html_page = BeautifulSoup(html, 'html.parser')
+    book_price = content_html_page.find_all(
+        'span', class_="a-size-base a-color-price a-color-price")
+    kindle_unlimited_price = get_kindle_unlimited_price(soup_html)
+        'span', class_="extra-message olp-link")
 
-url = 'https://www.amazon.com.br/Hit-Makers-Things-Become-Popular/dp/0241216028/ref=tmm_hrd_swatch_0?_encoding=UTF8&qid=&sr='
+    if (book_price):
+        return get_formatted_price(str(book_price))
 
-# Main App
-html = url_to_html(url)
-# html = url_to_html(sys.argv[1])
-price = find_price_in_html(html)
-price = get_formatted_price(price)
-print(price)
+    if (kindle_unlimited_price):
+        return get_formatted_price(str(kindle_unlimited_price))
+
+    return False
+
+
+def send_push_notification(url, preco_original, preco_ideal, push_option):
+    # preco_atual = get_price(url)
+    preco_atual = 0
+
+    if preco_atual <= preco_ideal:
+        print("Corre lá pra comprar!")
+        return
+
+    if (preco_atual < preco_original) and (push_option == True):
+        print("O preço caiu")
+        return
+
+    return False
+
+
+def main():
+    invalid_value = None
+
+    url = input("Cole abaixo a URL do livro físico ou eBook escolhido:")
+    preco_original = get_price(url)
+
+    if (type(preco_original) == float) or (type(get_price) == bool):
+        print("O preço atual do produto é:", preco_original)
+        while !((preco_ideal != invalid_value) and (preco_ideal < preco_original)):
+            preco_ideal = float(
+                input("Qual preço você quer pagar por esse produto?"))
+    else:
+        print("Não consegui encontrar o produto.")
+        return
+
+    # push_option = bool(input("Gostaria de receber...mesmo se..."))
+    # send_push_notification(url, preco_original, preco_ideal, push_option)
+
+
+main()
