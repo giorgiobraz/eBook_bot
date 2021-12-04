@@ -31,7 +31,7 @@ def get_price(url):
     content_html_page = BeautifulSoup(html, 'html.parser')
     book_price = content_html_page.find_all(
         'span', class_="a-size-base a-color-price a-color-price")
-    kindle_unlimited_price = content_html_page.find_all(
+    kindle_unlimited_price = get_kindle_unlimited_price(soup_html)
         'span', class_="extra-message olp-link")
 
     if (book_price):
