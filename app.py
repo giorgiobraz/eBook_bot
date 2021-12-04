@@ -33,14 +33,10 @@ def parse_price(price):
 def get_book_price(soup_html):
     return soup_html.find(
         'span', class_="a-size-base a-color-price a-color-price")
-<<<<<<< HEAD
 
 
 def get_kindle_unlimited_price(soup_html):
     return soup_html.find(
-=======
-    kindle_unlimited_price = get_kindle_unlimited_price(soup_html)
->>>>>>> fd3583be3ca514fcb7f9d1bd843744accdaba1ad
         'span', class_="extra-message olp-link")
 
 
