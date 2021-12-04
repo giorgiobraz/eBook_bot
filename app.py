@@ -17,7 +17,7 @@ def url_to_html(url):
     return response.read()
 
 
-def get_formatted_price(price):
+def parse_price(price):
     price_start = price.find('$') + 1
     price_end = price.find(',') + 3
     price = price[price_start:price_end]
