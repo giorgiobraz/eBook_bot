@@ -11,13 +11,8 @@ load_dotenv()
 KINDLE = os.getenv('KINDLE')
 
 
-def isURL(url):
-    isURL = url.find("https://www.amazon.com")
-    invalid = -1
-
-    if isURL != invalid:
-        return True
-    return False
+def isAmazonURL(url):
+    return url.find("https://www.amazon.com") != -1
 
 
 def url_to_html(url):
