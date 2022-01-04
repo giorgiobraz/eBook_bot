@@ -16,25 +16,24 @@ def isAmazonURL(url):
 
 
 def url_to_html(url):
-    isAmazonURL = isURL(url)
+    validAmazonURL = isAmazonURL(url)
 
-    if isAmazonURL:
-        try:
-            req = Request(url)
-            response = urlopen(req)
-            return response.read()
-        except HTTPError as e:
-            print(e.status, e.reason)
-        except URLError as e:
-            print(e.reason)
-
-    return False
+    if not validAmazonURL:
+        return False
+    try:
+        req = Request(url)
+        response = urlopen(req)
+        return response.read()
+    except HTTPError as e:
+        print(e.status, e.reason)
+    except URLError as e:
+        print(e.reason)
 
 
 def url_to_soup(url):
     html = url_to_html(url)
 
-    if not html:
+    if html:
         return BeautifulSoup(html, 'html.parser')
     return None
 
@@ -87,14 +86,14 @@ def send_push_notification(url, preco_original, preco_ideal, push_option):
 
 
 def main():
-    invalid_value = None
-    invalid_url = -1
+    # invalid_value = None
+    # invalid_url = -1
 
     # url = input("Cole abaixo a URL do livro físico ou eBook escolhido:")
     # url = KINDLE
     url = "https://www.amazon.com/product"
-    soup = html_to_soup(url)
-    if soup != False:
+    soup = url_to_soup(url)
+    if soup:
         preco_original = get_price(soup)
         print("O preço original é:", preco_original)
     else:
