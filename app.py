@@ -36,7 +36,7 @@ def url_to_soup(url):
 
     if not html:
         return BeautifulSoup(html, 'html.parser')
-    return False
+    return None
 
 
 def parse_price(price):
