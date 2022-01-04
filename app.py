@@ -1,24 +1,42 @@
 import os
-from urllib.request import urlopen
-# from urllib.error import URLError, HTTPError
+from urllib.request import Request, urlopen
+from urllib.error import URLError, HTTPError
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-# import sys
 load_dotenv()
 
 
-# TODO Send Push Notification
+# TODO send push notification
 
 KINDLE = os.getenv('KINDLE')
 
 
+def isAmazonURL(url):
+    return url.find("https://www.amazon.com") != -1
+
+
 def url_to_html(url):
-    response = urlopen(url)
-    return response.read()
+    isAmazonURL = isURL(url)
+
+    if isAmazonURL:
+        try:
+            req = Request(url)
+            response = urlopen(req)
+            return response.read()
+        except HTTPError as e:
+            print(e.status, e.reason)
+        except URLError as e:
+            print(e.reason)
+
+    return False
 
 
-def html_to_soup(html):
-    return BeautifulSoup(html, 'html.parser')
+def url_to_soup(url):
+    html = url_to_html(url)
+
+    if not html:
+        return BeautifulSoup(html, 'html.parser')
+    return None
 
 
 def parse_price(price):
@@ -70,13 +88,17 @@ def send_push_notification(url, preco_original, preco_ideal, push_option):
 
 def main():
     invalid_value = None
+    invalid_url = -1
 
     # url = input("Cole abaixo a URL do livro físico ou eBook escolhido:")
-    url = KINDLE
-    html = url_to_html(url)
-    soup = html_to_soup(html)
-    preco_original = get_price(soup)
-    print("O preço original é:", preco_original)
+    # url = KINDLE
+    url = "https://www.amazon.com/product"
+    soup = html_to_soup(url)
+    if soup != False:
+        preco_original = get_price(soup)
+        print("O preço original é:", preco_original)
+    else:
+        print("Algo deu errado :(")
 
     # if (type(preco_original) == float) or (type(get_price) == bool):
     #     print("O preço atual do produto é:", preco_original)
