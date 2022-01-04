@@ -34,7 +34,7 @@ def url_to_html(url):
 def url_to_soup(url):
     html = url_to_html(url)
 
-    if html != False:
+    if not html:
         return BeautifulSoup(html, 'html.parser')
     return False
 
