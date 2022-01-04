@@ -31,7 +31,7 @@ def url_to_html(url):
     return False
 
 
-def html_to_soup(url):
+def url_to_soup(url):
     html = url_to_html(url)
 
     if html != False:
